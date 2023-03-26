@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "erg-score-pipeline"
+version = "0.1.0"
+description = "Pipeline for erg score processing"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "erg_score_pipeline"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^1.5.3"
+numpy = "^1.24.2"
+ipykernel = "^6.21.3"
+matplotlib = "^3.7.1"
+torch = "^2.0.0"
+pandera = "^0.14.5"
+boto3 = "^1.26.99"
+s3fs = "<=0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
