@@ -8,4 +8,5 @@ This project aims to build a completely working data pipeline that takes in the 
 ## Working Improvements
 * Any TODO tags
 * Better organisation of functions into different files
-* Usage of main.py to run all scripts
+* Addition of main.py to run all scripts
+* Modifying testprocess content to deploy on AWS Lambda
