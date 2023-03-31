@@ -5,6 +5,19 @@ import pandas as pd
 from io import StringIO
 import boto3
 
+import pandera as pa
+from pandera import Column, DataFrameSchema, Check, check_output
+
+cli_input_schema = pa.DataFrameSchema({
+    'cutoff_minute': pa.Column(int, coerce=True),
+    'metres': pa.Column(
+        int, Check(lambda x: 1000 <= x <= 2000, element_wise=True,
+                   error="range checker [1000, 2000]")),
+    's/m': pa.Column(
+        int, Check(lambda x: 18 <= x <= 23, element_wise=True,
+                   error="range checker [18, 23]")),
+    '/500m': pa.Column(str, Check.str_matches("\d\:[0-5]\d\.\d"))
+})
 #TODO: Refactor code
 
 #Get parameters
@@ -25,6 +38,7 @@ def get_all_splits(segments, segment_length):
         segment_counter +=1
     return erg_scores
 
+@check_output(cli_input_schema)
 def upload_to_s3(date, erg_scores, bucket, key):
 #Convert inputs directly to dataframe, saving directly to s3 bucket
     client = boto3.client("s3")
@@ -39,3 +53,4 @@ def upload_to_s3(date, erg_scores, bucket, key):
         print(f"Successfully uploaded erg score from {date}. Status - {status}")
     else:
         print(f"Upload to S3 unsuccessful. Status - {status}")
+    return erg_scores_df

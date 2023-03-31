@@ -1,5 +1,7 @@
 import boto3
 from cli_entry import *
+from testprocess import *
+
 
 ## AWS set up
 boto3.setup_default_session(profile_name='dev-profile')
