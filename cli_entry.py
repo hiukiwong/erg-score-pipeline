@@ -1,6 +1,4 @@
-import csv
 from pathlib import Path
-import os
 import pandas as pd
 from io import StringIO
 import boto3
@@ -8,16 +6,17 @@ import boto3
 import pandera as pa
 from pandera import Column, DataFrameSchema, Check, check_output
 
-cli_input_schema = pa.DataFrameSchema({
-    'cutoff_minute': pa.Column(int, coerce=True),
-    'metres': pa.Column(
+cli_input_schema = DataFrameSchema({
+    'cutoff_minute': Column(int, coerce=True),
+    'metres': Column(
         int, Check(lambda x: 1000 <= x <= 2000, element_wise=True,
-                   error="range checker [1000, 2000]")),
-    's/m': pa.Column(
+                   error="range checker [1000, 2000]"), coerce=True),
+    's/m': Column(
         int, Check(lambda x: 18 <= x <= 23, element_wise=True,
-                   error="range checker [18, 23]")),
-    '/500m': pa.Column(str, Check.str_matches("\d\:[0-5]\d\.\d"))
+                   error="range checker [18, 23]"), coerce=True),
+    '/500m': Column(str, Check.str_matches("\d\:[0-5]\d\.\d"))
 })
+
 #TODO: Refactor code
 
 #Get parameters
