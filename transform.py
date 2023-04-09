@@ -3,7 +3,7 @@ from io import StringIO, BytesIO
 import pandera as pa
 from pandera import Column, DataFrameSchema, check_output
 import boto3
-boto3.setup_default_session(profile_name='dev-profile')
+# boto3.setup_default_session(profile_name='dev-profile')
 s3_client = boto3.client("s3")
 
 input_bucket = 'ergscorepipeline'
@@ -54,6 +54,6 @@ def lambda_handler(event, context):
     response = s3_client.get_object(Bucket=bucket, Key=key)
 
     #Process it
-    erg_scores_df = pd.read_csv(BytesIO(resp['Body'].read().decode('utf-8')))
+    erg_scores_df = pd.read_csv(StringIO(response['Body'].read().decode('utf-8')))
     date = key[-14:-4]
     process_lambda(erg_scores_df, date)
